@@ -4,6 +4,7 @@ import time
 import datetime
 import dns.rdtypes.IN.A
 import dns.rdtypes.ANY.CNAME
+import dns.rdtypes.ANY.NS
 
 root_servers = {
     "a": "198.41.0.4",
