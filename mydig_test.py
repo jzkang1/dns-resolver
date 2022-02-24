@@ -50,14 +50,14 @@ def main():
         return
 
     for domain in sites:
-        for resolver in range(2,3):
+        for resolver in range(0,3):
             server_list = []
-            # if resolver == 0:
-            #     server_list = root_servers
+            if resolver == 0:
+                server_list = root_servers
             # if resolver == 1:
             #     server_list = ["130.245.255.4"]
-            if resolver == 2:
-                server_list = ["8.8.8.8"]
+            # if resolver == 2:
+            #     server_list = ["8.8.8.8"]
             else:
                 break
 

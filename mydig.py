@@ -55,9 +55,13 @@ def main():
     if not resolved:
         print("{} could not be resolved".format(domain))
 
-def resolve(domain, server, root_server, visited):
+def resolve(domain, server, original, visited):
+
+    # if domain/server combination already visited, then return
     if (domain + " " + server) in visited:
         return None
+
+    # add combination to the set
     visited.add(domain + " " + server)
     
     try:
@@ -81,11 +85,14 @@ def resolve(domain, server, root_server, visited):
 
                 # for every ip in the rrset object, check for A record and CNAME
                 for i in a:
+
+                    # if A record found, return
                     if type(i) == dns.rdtypes.IN.A.A:
                         return str(a)
+                    
+                    # if CNAME found, resolve the CNAME using the original server
                     elif type(i) == dns.rdtypes.ANY.CNAME.CNAME:
-                        print("used cname")
-                        resolution = resolve(str(i), root_server, root_server, visited)
+                        resolution = resolve(str(i), original, original, visited)
                         if resolution != None:
                             return resolution
 
@@ -95,12 +102,16 @@ def resolve(domain, server, root_server, visited):
 
                 # for every ip in the rrset object, check for A record and CNAME
                 for i in a:
+
+                    # if A record found, resolve the record
                     if type(i) == dns.rdtypes.IN.A.A:
-                        resolution = resolve(domain, str(i), root_server, visited)
+                        resolution = resolve(domain, str(i), original, visited)
                         if resolution != None:
                             return resolution
+
+                    # if CNAME found, resolve the CNAME using the original server
                     elif type(i) == dns.rdtypes.ANY.CNAME.CNAME:
-                        resolution = resolve(str(i), root_server, root_server, visited)
+                        resolution = resolve(str(i), original, original, visited)
                         if resolution != None:
                             return resolution
 
@@ -110,18 +121,27 @@ def resolve(domain, server, root_server, visited):
 
                 # for every ip in the rrset object, check for A record and CNAME
                 for i in a:
+
+                    # if A record found, resolve the record
                     if type(i) == dns.rdtypes.IN.A.A:
-                        resolution = resolve(domain, str(i), root_server)
+                        resolution = resolve(domain, str(i), original, visited)
                         if resolution != None:
                             return resolution
+
+                    # if CNAME found, resolve the CNAME using the original server
                     elif type(i) == dns.rdtypes.ANY.CNAME.CNAME:
-                        resolution = resolve(str(i), root_server, root_server)
+                        resolution = resolve(str(i), original, original, visited)
+                        if resolution != None:
+                            return resolution
+                    
+                    # if name server found, resolve it 
+                    elif type(i) == dns.rdtypes.ANY.NS.NS:
+                        resolution = resolve(str(i), original, original, visited)
                         if resolution != None:
                             return resolution
         return None
                     
     except Exception as e:
-        print(e)
         return None
 
 if __name__ == "__main__":
