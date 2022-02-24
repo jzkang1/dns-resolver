@@ -1,8 +1,9 @@
 import dns
 import dns.query
-import dns.resolver
 import time
 import datetime
+import dns.rdtypes.IN.A
+import dns.rdtypes.ANY.CNAME
 
 root_servers = {
     "a": "198.41.0.4",
@@ -21,8 +22,7 @@ root_servers = {
 }
 
 def main():
-    # domain = input("Enter domain: ")
-    domain = "www.cnn.com"
+    domain = input("Enter domain: ")
     print()
 
     result = "QUESTION SECTION:" + "\n" + "{} {:<3}{:<5}".format(domain, "IN", "A") + "\n\n"
@@ -73,11 +73,13 @@ def resolve(domain, server, root_server, visited):
         # if an error occured, raise an exception
         rcode = response.rcode()
         if rcode != dns.rcode.NOERROR:
-            raise Exception("Error in DNS response")
+            raise Exception("Error in DNS response while resolving {}".format(domain))
 
         # if there is an answer, return the path
         if response.answer != None and len(response.answer) > 0:
             for a in response.answer:
+
+                # for every ip in the rrset object, check for A record and CNAME
                 for i in a:
                     if type(i) == dns.rdtypes.IN.A.A:
                         return str(a)
@@ -91,14 +93,13 @@ def resolve(domain, server, root_server, visited):
         if response.additional != None and len(response.additional) > 0:
             for a in response.additional:
 
-                # for every ip in
+                # for every ip in the rrset object, check for A record and CNAME
                 for i in a:
                     if type(i) == dns.rdtypes.IN.A.A:
                         resolution = resolve(domain, str(i), root_server, visited)
                         if resolution != None:
                             return resolution
                     elif type(i) == dns.rdtypes.ANY.CNAME.CNAME:
-                        print("used cname")
                         resolution = resolve(str(i), root_server, root_server, visited)
                         if resolution != None:
                             return resolution
@@ -106,13 +107,14 @@ def resolve(domain, server, root_server, visited):
         # iterate through authority servers and try to resolve recursively
         if response.authority != None and len(response.authority) > 0:
             for a in response.authority:
+
+                # for every ip in the rrset object, check for A record and CNAME
                 for i in a:
                     if type(i) == dns.rdtypes.IN.A.A:
                         resolution = resolve(domain, str(i), root_server)
                         if resolution != None:
                             return resolution
                     elif type(i) == dns.rdtypes.ANY.CNAME.CNAME:
-                        print("used cname")
                         resolution = resolve(str(i), root_server, root_server)
                         if resolution != None:
                             return resolution
