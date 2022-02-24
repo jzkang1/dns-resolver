@@ -140,7 +140,7 @@ def resolve(domain, server, original, visited):
                         if resolution != None:
                             return resolution
         return None
-                    
+
     except Exception as e:
         return None
 

@@ -1,0 +1,49 @@
+Enter domain: youtube.com
+
+QUESTION SECTION:
+youtube.com IN A    
+
+ANSWER SECTION:
+youtube.com. 300 IN A 142.251.32.110
+
+QUERY TIME: 97.08571434020996 ms    
+WHEN: 2022-02-23 23:19:08.414234
+
+-----------------------------------------------------
+
+Enter domain: google.com
+
+QUESTION SECTION:
+google.com IN A    
+
+ANSWER SECTION:
+google.com. 300 IN A 142.250.80.110
+
+QUERY TIME: 95.39484977722168 ms   
+WHEN: 2022-02-23 23:19:26.777606
+
+-----------------------------------------------------
+
+Enter domain: instagram.com
+
+QUESTION SECTION:
+instagram.com IN A
+
+ANSWER SECTION:
+instagram.com. 300 IN A 157.240.241.174
+
+QUERY TIME: 78.90534400939941 ms
+WHEN: 2022-02-23 23:21:29.382758
+
+-----------------------------------------------------
+
+Enter domain: zoom.us
+
+QUESTION SECTION:
+zoom.us IN A
+
+ANSWER SECTION:
+ns-1772.awsdns-29.co.uk. 172800 IN A 205.251.198.236
+
+QUERY TIME: 356.34493827819824 ms
+WHEN: 2022-02-23 23:22:03.895173
